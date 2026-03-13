@@ -2,12 +2,17 @@
 
 ## What You Are Given
 
-The Chocolate DOOM source code folder with the WAD file included. You may use this directly or download your own copy of Chocolate DOOM — either works. Build and compile the project to get it running before you start.
+A modified Chocolate DOOM source code folder (`chocolate-doom.zip`).
 
-**To run the provided game out-of-the-box (Linux):**
-```bash
-./src/chocolate-doom -iwad freedoom1.wad
-```
+## Setup Instructions
+
+1. Extract `chocolate-doom.zip`.
+2. Download the **Freedoom Phase 1** WAD (`freedoom1.wad`) from their official GitHub releases: [https://github.com/freedoom/freedoom/releases](https://github.com/freedoom/freedoom/releases)
+3. Place `freedoom1.wad` inside the extracted `chocolate-doom` folder.
+4. Open a terminal in the `chocolate-doom` folder and run the game:
+   ```bash
+   ./src/chocolate-doom -iwad freedoom1.wad
+   ```
 
 ---
 
