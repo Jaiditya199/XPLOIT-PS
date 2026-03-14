@@ -77,6 +77,8 @@ void A_PlayerScream();
 void A_Fall();
 void A_XScream();
 void A_Look();
+void A_CompanionChase();
+void A_CompanionAttack();
 void A_Chase();
 void A_FaceTarget();
 void A_PosAttack();

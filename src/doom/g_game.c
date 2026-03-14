@@ -707,7 +707,19 @@ void G_DoLoadLevel (void)
 	memset (players[i].frags,0,sizeof(players[i].frags)); 
     } 
 		 
-    P_SetupLevel (gameepisode, gamemap, 0, gameskill);    
+    P_SetupLevel (gameepisode, gamemap, 0, gameskill);
+// Spawn companion bot next to player
+    if (playeringame[0] && players[0].mo)
+    {
+        mobj_t *companion = P_SpawnMobj(
+            players[0].mo->x + 64*FRACUNIT,
+            players[0].mo->y,
+            players[0].mo->z,
+            MT_POSSESSED
+        );
+        companion->target = players[0].mo;
+        companion->flags &= ~MF_COUNTKILL;
+    }    
     displayplayer = consoleplayer;		// view the guy you are playing    
     gameaction = ga_nothing; 
     Z_CheckHeap ();
@@ -725,6 +737,8 @@ void G_DoLoadLevel (void)
     {
         players[consoleplayer].message = "Press escape to quit.";
     }
+
+    players[consoleplayer].message = "XPLOIT-PS CHALLENGE!";
 } 
 
 static void SetJoyButtons(unsigned int buttons_mask)

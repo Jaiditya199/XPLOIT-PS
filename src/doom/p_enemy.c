@@ -2022,3 +2022,72 @@ void A_PlayerScream (mobj_t* mo)
     
     S_StartSound (mo, sound);
 }
+
+void A_CompanionChase(mobj_t *actor)
+{
+    fixed_t dist;
+    player_t *player = &players[0];
+
+    if (!player->mo || player->mo->health <= 0)
+        return;
+
+    actor->target = player->mo;
+
+    dist = P_AproxDistance(
+        actor->x - player->mo->x,
+        actor->y - player->mo->y);
+
+    if (dist < 96 * FRACUNIT)
+    {
+        A_FaceTarget(actor);
+        return;
+    }
+
+    if (--actor->movecount < 0 || !P_Move(actor))
+        P_NewChaseDir(actor);
+}
+
+void A_CompanionAttack(mobj_t *actor)
+{
+    thinker_t *th;
+    mobj_t *mo;
+    mobj_t *besttarget = NULL;
+    fixed_t dist;
+    fixed_t bestdist = 768 * FRACUNIT;
+
+    for (th = thinkercap.next; th != &thinkercap; th = th->next)
+    {
+        if (th->function.acp1 != (actionf_p1)P_MobjThinker)
+            continue;
+
+        mo = (mobj_t *)th;
+
+        if (!(mo->flags & MF_SHOOTABLE))
+            continue;
+        if (mo->health <= 0)
+            continue;
+        if (mo == actor)
+            continue;
+        if (mo->type == MT_PLAYER)
+            continue;
+
+        dist = P_AproxDistance(actor->x - mo->x, actor->y - mo->y);
+
+        if (dist < bestdist && P_CheckSight(actor, mo))
+        {
+            bestdist = dist;
+            besttarget = mo;
+        }
+    }
+
+    if (besttarget)
+    {
+        actor->target = besttarget;
+        A_FaceTarget(actor);
+        A_PosAttack(actor);
+    }
+    else
+    {
+        A_CompanionChase(actor);
+    }
+}
